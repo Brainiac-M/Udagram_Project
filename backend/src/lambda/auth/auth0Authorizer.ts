@@ -16,13 +16,13 @@ export const handler = async (
   event: CustomAuthorizerEvent
 ): Promise<CustomAuthorizerResult> => {
 
-  logger.info('Authorizing a user', event.authorizationToken)
+  logger.info('Authorizing this user', event.authorizationToken)
 
   try {
 
     const jwtToken = await verifyToken(event.authorizationToken)
 
-    logger.info('User was authorized', jwtToken)
+    logger.info('Authorization granted to user', jwtToken)
 
     return {
       principalId: jwtToken.sub,
@@ -37,10 +37,10 @@ export const handler = async (
         ]
       }
     }
-  } catch (e) {
+  } catch (error) {
 
-    logger.error('User not authorized', { error: e.message })
-
+    logger.error('Authorization NOT granted to user', { error: error.message })
+    //display if user does not authorized
     return {
       principalId: 'user',
       policyDocument: {
@@ -60,7 +60,7 @@ export const handler = async (
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   try {
 
-    const token = getToken(authHeader)
+    const token = getToken(authHeader) //uses what is returned as "Token" from the getToken function
     const res = await Axios.get(jwksUrl);
 
     // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
@@ -68,19 +68,19 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
     const cert = `-----BEGIN CERTIFICATE-----\n${pemData}\n-----END CERTIFICATE-----`
 
     return verify(token, cert, { algorithms: ['RS256'] }) as JwtPayload
-  } catch(err){
-    logger.error('Fail to authenticate', err)
+  } catch(error){
+    logger.error('Fail to authenticate user', error)
   }
 }
 
 function getToken(authHeader: string): string {
-  if (!authHeader) throw new Error('No authentication header')
+  if (!authHeader) throw new Error('No authentication header provided')
 
   if (!authHeader.toLowerCase().startsWith('bearer '))
-    throw new Error('Invalid authentication header')
+    throw new Error('Invalid authentication header provided')
 
-  const split = authHeader.split(' ')
-  const token = split[1]
+  const separateauthHeader = authHeader.split(' ')
+  const token = separateauthHeader[1]  //fetch only the second item in the array
 
   return token
 }

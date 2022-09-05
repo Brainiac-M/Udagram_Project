@@ -4,11 +4,10 @@ import {APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler} fro
 import {deleteToDo} from "../../businessLogic/ToDo";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // TODO: Remove a TODO item by id
     console.log("Processing Event ", event);
     const authorization = event.headers.Authorization;
-    const split = authorization.split(' ');
-    const jwtToken = split[1];
+    const separateauthHeader = authorization.split(' ');
+    const jwtToken = separateauthHeader[1];
 
     const todoId = event.pathParameters.todoId;
 

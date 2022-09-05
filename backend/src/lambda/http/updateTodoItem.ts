@@ -7,8 +7,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
     console.log("Processing Event ", event);
     const authorization = event.headers.Authorization;
-    const split = authorization.split(' ');
-    const jwtToken = split[1];
+    const separateauthHeader = authorization.split(' ');
+    const jwtToken = separateauthHeader[1];
 
     const todoId = event.pathParameters.todoId;
     const updatedTodo: UpdateTodoRequest = JSON.parse(event.body);

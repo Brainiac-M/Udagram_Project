@@ -9,19 +9,24 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const authorization = event.headers.Authorization;
     const separateauthHeader = authorization.split(' ');
     const jwtToken = separateauthHeader[1];
-
     const todoId = event.pathParameters.todoId;
     const updatedTodo: UpdateTodoRequest = JSON.parse(event.body);
 
-    const toDoItem = await updateToDo(updatedTodo, todoId, jwtToken);
+    try{
+        await updateToDo(updatedTodo, todoId, jwtToken);  //const toDoItem = await updateToDo(updatedTodo, todoId, jwtToken);
 
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-            "item": toDoItem
-        }),
+        return {
+            statusCode: 204,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: undefined     //or body: JSON.stringify({ toDoItem }) when statusCode : 200
+        };
+    } catch(err){
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ err })
+        };
     }
-};
+
+}

@@ -37,9 +37,9 @@ export const handler = async (
         ]
       }
     }
-  } catch (error) {
+  } catch (err) {
 
-    logger.error('Authorization NOT granted to user', { error: error.message })
+    logger.error('Authorization NOT granted to user', { error: err.message })
     //display if user does not authorized
     return {
       principalId: 'user',

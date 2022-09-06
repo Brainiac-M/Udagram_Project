@@ -1,6 +1,6 @@
 org: foxcoder508
-app: serverless-udagram-app
-service: serverless-udagram
+app: serverless-udagram-app1
+service: serverless-udagram1
 
 plugins:
   - serverless-webpack
@@ -13,7 +13,7 @@ provider:
   runtime: nodejs12.x
   # lambdaHashingVersion: '20201221'
 
-  stage: ${opt:stage, 'prod'}
+  stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-2'}
 
   tracing:

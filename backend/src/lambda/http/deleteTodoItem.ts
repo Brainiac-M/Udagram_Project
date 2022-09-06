@@ -9,15 +9,26 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const separateauthHeader = authorization.split(' ');
     const jwtToken = separateauthHeader[1];
 
-    const todoId = event.pathParameters.todoId;
+    try{
+        const todoId = event.pathParameters.todoId;
 
-    const deleteData = await deleteToDo(todoId, jwtToken);
+        await deleteToDo(todoId, jwtToken);
 
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: deleteData,
+        return {
+            statusCode: 204,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+            body: undefined,
+        }
+    } catch (err){
+        return{
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({err})
+        };
     }
+    
 };

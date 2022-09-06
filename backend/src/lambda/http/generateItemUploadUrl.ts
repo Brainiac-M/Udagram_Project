@@ -7,15 +7,25 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log("Processing Event ", event);
     const todoId = event.pathParameters.todoId;
 
-    const uploadURL = await generateUploadUrl(todoId);
+    try {
+        const objectsignedURL :string = await generateUploadUrl(todoId);
 
-    return {
-        statusCode: 202,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-            uploadUrl: uploadURL,
-        })
-    };
-};
+        return {
+            statusCode: 201,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({
+                uploadUrl: objectsignedURL
+            })
+        };
+    } catch(err){
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({ err })
+        };
+    }
+}

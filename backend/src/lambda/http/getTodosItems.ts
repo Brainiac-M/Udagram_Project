@@ -11,14 +11,21 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const jwtToken = separateauthHeader[1];
 
     const toDos = await getAllToDo(jwtToken);
-
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-            "items": toDos,
-        }),
+    try{
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({ toDos })
+        }
+    } catch (err){
+        return {
+            statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({ err })
+        };
     }
-};
+}
